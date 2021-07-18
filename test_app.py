@@ -8,7 +8,7 @@ from main import app
 #         assert response.status_code == 200
 #         assert response.json() == {"ping":"pong"}
 
-def test_pred_virginica():
+def test_pred():
     payload = {
         "Status_of_existing_checking_account": "<0 DM",
         "Duration_in_month": 6,

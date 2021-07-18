@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Predict Credit score</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+</head>
+<body>
+<div class="ui container">
+   <script>
+
+$(document).ready(function() {
+data_list=[];
+var new_data;
+  $("#add").on( "click",function() {
+    console.log('adding data');
+    $('.ui.modal').modal('show');
+    var sel1 = document.getElementById("Status_of_existing_checking_account");
+    var Status_of_existing_checking_account = sel1.options[sel1.selectedIndex].text
+    var Duration_in_month = $("#Duration_in_month").val();
+    var sel2 = document.getElementById("Credit_history");
+    var Credit_history = sel2.options[sel2.selectedIndex].text
+    var sel3 = document.getElementById("Purpose");
+    var Purpose = sel3.options[sel3.selectedIndex].text
+    var Credit_amount = $("#Credit_amount").val();
+    var sel4 = document.getElementById("Savings_account_bonds");
+    var Savings_account_bonds = sel4.options[sel4.selectedIndex].text
+    var sel5 = document.getElementById("Present_employment_since");
+    var Present_employment_since = sel5.options[sel5.selectedIndex].text
+    var Installment_rate_in_percentage_of_disposable_income = $("#Installment_rate_in_percentage_of_disposable_income").val();
+    var sel6 = document.getElementById("Personal_status_and_sex");
+    var Personal_status_and_sex = sel6.options[sel6.selectedIndex].text
+    var sel7 = document.getElementById("Other_debtors_guarantors");
+    var Other_debtors_guarantors = sel7.options[sel7.selectedIndex].text
+    var Present_residence_since = $("#Present_residence_since").val();
+    var sel8 = document.getElementById("Property");
+    var Property = sel8.options[sel8.selectedIndex].text
+    var Age_in_years = $("#Age_in_years").val();
+    var sel9 = document.getElementById("Other_installment_plans");
+    var Other_installment_plans = sel9.options[sel9.selectedIndex].text
+    var sel10 = document.getElementById("Housing");
+    var Housing = sel10.options[sel10.selectedIndex].text
+    var Number_of_existing_credits_at_this_bank = $("#Number_of_existing_credits_at_this_bank").val();
+    var sel11 = document.getElementById("Job");
+    var Job = sel11.options[sel11.selectedIndex].text
+    var Number_of_people_being_liable_to_provide_maintenance_for = $("#Number_of_people_being_liable_to_provide_maintenance_for").val();
+    var sel12 = document.getElementById("Telephone");
+    var Telephone = sel12.options[sel12.selectedIndex].text
+    var sel13 = document.getElementById("foreign_worker");
+    var foreign_worker = sel13.options[sel13.selectedIndex].text
+    var risk_class = $("#risk_class").val();
+    new_data = { "Status_of_existing_checking_account": Status_of_existing_checking_account, "Duration_in_month": Duration_in_month, "Credit_history": Credit_history, "Purpose": Purpose, "Credit_amount": Credit_amount, "Savings_account_bonds": Savings_account_bonds, "Present_employment_since": Present_employment_since, "Installment_rate_in_percentage_of_disposable_income": Installment_rate_in_percentage_of_disposable_income, "Personal_status_and_sex": Personal_status_and_sex, "Other_debtors_guarantors": Other_debtors_guarantors, "Present_residence_since": Present_residence_since, "Property": Property, "Age_in_years": Age_in_years, "Other_installment_plans": Other_installment_plans, "Housing": Housing, "Number_of_existing_credits_at_this_bank": Number_of_existing_credits_at_this_bank, "Job": Job, "Number_of_people_being_liable_to_provide_maintenance_for": Number_of_people_being_liable_to_provide_maintenance_for, "Telephone": Telephone, "foreign_worker": foreign_worker, "risk_class": risk_class}
+    console.log(new_data);
+  });
+
+  $("#feedback").on( "click",function() {
+      console.log('Retraining');
+      $.ajax({
+        url: '/feedback_loop',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data_list),
+        dataType: 'json'
+      });
+  });
+  $("#save").click(function() {
+  var risk_class = $("#risk_class").val();
+  new_data['risk_class'] = risk_class
+      $('.ui.modal').modal('hide');
+        data_list.push(new_data)
+  console.log(data_list);
+  });
+});
+</script>
+<h2>Predict Credit score</h2>
+<div>
+  <form method="post">
+     <label for="input">Status of existing checking account</label>
+     <select id="Status_of_existing_checking_account" name="Status_of_existing_checking_account" class="ui dropdown">
+        <option value="">Status of existing checking account</option>
+        <option value="0">{{status[0]}}</option>
+        <option value="1">{{status[1]}}</option>
+        <option value="2">{{status[2]}}</option>
+        <option value="3">{{status[3]}}</option>
+     </select>
+     <br><br>
+     <label for="input">Duration in month</label>
+     <input type="text" id="Duration_in_month" name="Duration_in_month">
+     <br><br>
+     <label for="input">Credit history</label>
+     <select id="Credit_history" name="Credit_history" class="ui dropdown">
+        <option value="">Credit history</option>
+        <option value="0">{{history[0]}}</option>
+        <option value="1">{{history[1]}}</option>
+        <option value="2">{{history[2]}}</option>
+        <option value="3">{{history[3]}}</option>
+        <option value="4">{{history[4]}}</option>
+     </select>
+     <br><br>
+     <label for="input">Purpose</label>
+     <select id="Purpose" name="Purpose" class="ui dropdown">
+        <option value="">Purpose</option>
+        <option value="0">{{purpose[0]}}</option>
+        <option value="1">{{purpose[1]}}</option>
+        <option value="2">{{purpose[2]}}</option>
+        <option value="3">{{purpose[3]}}</option>
+        <option value="4">{{purpose[4]}}</option>
+        <option value="5">{{purpose[5]}}</option>
+         <option value="6">{{purpose[6]}}</option>
+         <option value="7">{{purpose[7]}}</option>
+         <option value="8">{{purpose[8]}}</option>
+         <option value="9">{{purpose[9]}}</option>
+     </select>
+     <br><br>
+     <label for="input">Credit amount</label>
+     <input type="text" id="Credit_amount" name="Credit_amount">
+     <br><br>
+     <label for="input">Savings account/bonds</label>
+     <select id="Savings_account_bonds" name="Savings_account_bonds" class="ui dropdown">
+        <option value="">Savings account/bonds</option>
+        <option value="0">{{account[0]}}</option>
+        <option value="1">{{account[1]}}</option>
+        <option value="2">{{account[2]}}</option>
+        <option value="3">{{account[3]}}</option>
+        <option value="4">{{account[4]}}</option>
+     </select>
+     <br><br>
+     <label for="input">Present employment since</label>
+     <select id="Present_employment_since" name="Present_employment_since" class="ui dropdown">
+        <option value="">Present employment since</option>
+        <option value="0">{{emp[0]}}</option>
+        <option value="1">{{emp[1]}}</option>
+        <option value="2">{{emp[2]}}</option>
+        <option value="3">{{emp[3]}}</option>
+        <option value="4">{{emp[4]}}</option>
+     </select>
+     <br><br>
+     <label for="input">Installment rate in percentage of disposable income</label>
+     <input type="text" id="Installment_rate_in_percentage_of_disposable_income" name="Installment_rate_in_percentage_of_disposable_income">
+     <br><br>
+     <label for="input">Personal status and sex</label>
+     <select id="Personal_status_and_sex" name="Personal_status_and_sex" class="ui dropdown">
+        <option value="">Personal status and sex</option>
+        <option value="0">{{personal_status[0]}}</option>
+        <option value="1">{{personal_status[1]}}</option>
+        <option value="2">{{personal_status[2]}}</option>
+        <option value="3">{{personal_status[3]}}</option>
+     </select>
+     <br><br>
+     <label for="input">Other debtors / guarantors</label>
+     <select id="Other_debtors_guarantors" name="Other_debtors_guarantors" class="ui dropdown">
+        <option value="">Other debtors / guarantors</option>
+        <option value="0">{{guarantors[0]}}</option>
+        <option value="1">{{guarantors[1]}}</option>
+        <option value="2">{{guarantors[2]}}</option>
+     </select>
+     <br><br>
+     <label for="input">Present residence since</label>
+     <input type="text" id="Present_residence_since" name="Present_residence_since">
+     <br><br>
+     <label for="input">Property</label>
+     <select id="Property" name="Property" class="ui dropdown">
+        <option value="">Property</option>
+        <option value="0">{{property[0]}}</option>
+        <option value="1">{{property[1]}}</option>
+        <option value="2">{{property[2]}}</option>
+        <option value="3">{{property[3]}}</option>
+     </select>
+     <br><br>
+     <label for="input">Age in years</label>
+     <input type="text" id="Age_in_years" name="Age_in_years">
+     <br><br>
+     <label for="input">Other installment plans</label>
+     <select id="Other_installment_plans" name="Other_installment_plans" class="ui dropdown">
+        <option value="">Other installment plans</option>
+        <option value="0">{{installments[0]}}</option>
+        <option value="1">{{installments[1]}}</option>
+        <option value="2">{{installments[2]}}</option>
+     </select>
+     <br><br>
+     <label for="input">Housing</label>
+     <select id="Housing" name="Housing" class="ui dropdown">
+        <option value="">Housing</option>
+        <option value="0">{{housing[0]}}</option>
+        <option value="1">{{housing[1]}}</option>
+        <option value="2">{{housing[2]}}</option>
+     </select>
+     <br><br>
+     <label for="input">Number of existing credits at this bank</label>
+     <input type="text" id="Number_of_existing_credits_at_this_bank" name="Number_of_existing_credits_at_this_bank">
+     <br><br>
+     <label for="input">Job</label>
+     <select id="Job" name="Job" class="ui dropdown">
+        <option value="">Job</option>
+        <option value="0">{{job[0]}}</option>
+        <option value="1">{{job[1]}}</option>
+        <option value="2">{{job[2]}}</option>
+        <option value="3">{{job[3]}}</option>
+     </select>
+     <br><br>
+     <label for="input">Number of people being liable to provide maintenance for</label>
+     <input type="text" id="Number_of_people_being_liable_to_provide_maintenance_for" name="Number_of_people_being_liable_to_provide_maintenance_for">
+     <br><br>
+     <label for="input">Telephone</label>
+     <select id="Telephone" name="Telephone" class="ui dropdown">
+        <option value="">Telephone</option>
+        <option value="0">{{tel[0]}}</option>
+        <option value="1">{{tel[1]}}</option>
+     </select>
+     <br><br>
+     <label for="input">foreign worker</label>
+     <select id="foreign_worker" name="foreign_worker" class="ui dropdown">
+        <option value="">foreign worker</option>
+        <option value="0">{{foreign[0]}}</option>
+        <option value="1">{{foreign[1]}}</option>
+     </select>
+     <br><br>
+     <button type="submit" class="ui button primary">Predict</button>
+      <br><br>
+      <p>Prediction: {{ result }}</p>
+      <br><br>
+  </form>
+   <form>
+
+   </form>
+     <button type="button" id="add" class="ui button secondary">Add more</button>
+     <button type="button" id="feedback" class="ui button secondary">Retrain</button>
+   </div>
+   <div class="ui modal">
+    <i class="close icon"></i>
+    <div class="header">
+      Add risk class
+    </div>
+    <div class="content">
+        <div class="ui form">
+            <div class="field">
+              <label>"Good Risk", "Bad Risk"</label>
+              <textarea id="risk_class"></textarea>
+            </div>
+          </div>
+    </div>
+    <div class="actions">
+      <div id="save" class="ui positive right labeled icon button">
+        Add Data
+        <i class="plus icon"></i>
+      </div>
+    </div>
+  </div>
+  </div>
+</body>
+</html>

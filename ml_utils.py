@@ -26,6 +26,15 @@ class CreditScoreModel:
         prediction = self.model.predict(x)[0]
         return self.classes[prediction]
 
+    # function to retrain the model as part of the feedback loop
+    def retrain(self, data):
+        # pull out the relevant X and y from the FeedbackIn object
+        X = [list(d.dict().values())[:-1] for d in data]
+        y = [list(d.risk_class) for d in data]
+
+        # fit the classifier again based on the new data obtained
+        self.model.fit(X, y)
+
     column_data = {
         "Status of existing checking account": [
             "<0 DM",
