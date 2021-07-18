@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Predict Credit score</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+</head>
+<body>
+<div class="ui container">
+<h2>Predict Credit score</h2>
+<div>
+  <form method="post", enctype="multipart/form-data">
+     <label for="input">Select required categorical features (Press and hold Control key)</label>
+     <select name="categorical_features" multiple="" class="ui fluid dropdown">
+<option value="Status_of_existing_checking_account">Status of existing checking account</option>
+<option value="Credit_history">Credit history</option>
+<option value="Purpose">Purpose</option>
+<option value="Savings_account_bonds">Savings account/bonds</option>
+<option value="Present_employment_since">Present employment since</option>
+<option value="Personal_status_and_sex">Personal status and sex</option>
+<option value="Other_debtors_guarantors">Other debtors / guarantors</option>
+<option value="Property">Property</option>
+<option value="Other_installment_plans">Other installment plans</option>
+<option value="Housing">Housing</option>
+<option value="Job">Job</option>
+<option value="Telephone">Telephone</option>
+<option value="foreign_worker">foreign worker</option>
+</select>
+     <br><br>
+     <label for="input">Select required numerical features (Press and hold Control key)</label>
+     <select name="numeric_features" multiple="" class="ui fluid dropdown">
+        <option value="Duration_in_month">Duration in month</option>
+         <option value="Credit_amount">Credit amount</option>
+         <option value="Installment_rate_in_percentage_of_disposable_income">Installment rate in percentage of disposable income</option>
+         <option value="Present_residence_since">Present residence since</option>
+         <option value="Age_in_years">Age in years</option>
+         <option value="Number_of_existing_credits_at_this_bank">Number of existing credits at this bank</option>
+         <option value="Number_of_people_being_liable_to_provide_maintenance_for">Number of people being liable to provide maintenance for</option>
+     </select>
+     <br><br>
+     <label for="input">Select classifier</label>
+     <select id="classifier" name="classifier" class="ui dropdown">
+        <option value="">Classifier</option>
+        <option value="knn">KNeighborsClassifier</option>
+        <option value="lr">LogisticRegression</option>
+        <option value="dt">DecisionTreeClassifier</option>
+        <option value="svc">SVM</option>
+        <option value="nb">GaussianNB</option>
+        <option value="rf">RandomForestClassifier</option>
+         <option value="adaBoost">AdaBoostClassifier</option>
+     </select>
+      <label for="input">Target column</label>
+     <input type="text" id="target" name="target">
+
+      <input type="file" name="credit_data_file">
+      <button type="submit" class="ui button primary">Predict</button>
+
+  </form>
+    <br><br>
+      <p>Model: {{ result[0] }}</p>
+    <p>Accuracy: {{ result[1] }}</p>
+    <p>Precision: {{ result[2] }}</p>
+    <p>Recall: {{ result[3] }}</p>
+    <p>F1 score: {{ result[4] }}</p>
+      <br><br>
+   </div>
+  </div>
+</body>
+</html>

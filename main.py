@@ -1,9 +1,13 @@
 import uvicorn
-from fastapi import FastAPI, Request, Form
+from fastapi import FastAPI, Request, Form, File, UploadFile
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from ml_utils import CreditScoreModel
 from typing import List
+from matplotlib import pyplot as plt
+from build_model import build
+import pandas as pd
+import io
 
 app = FastAPI(
     title="Credit Risk",
@@ -59,6 +63,19 @@ class FeedbackIn(BaseModel):
     Number_of_existing_credits_at_this_bank: int
     Number_of_people_being_liable_to_provide_maintenance_for: int
     risk_class: str
+
+class ModelIn(BaseModel):
+    numerical_col: list
+    categorical_col: list
+    target: str
+    classifier: str
+
+class ModelOut(BaseModel):
+    model: str
+    accuracy: float
+    precision: float
+    recall: float
+    f1_score: float
 
 @app.get("/ping")
 def ping():
@@ -131,7 +148,7 @@ def feedback_loop(request: Request):
     foreign = CreditScoreModel.column_data['foreign worker']
 
     result = "Fill above details and click on Predict"
-    return templates.TemplateResponse('home.html', context={'request': request, 'result': result, 'status': status, 'history': history, 'purpose' : purpose, 'account' : account, 'emp': emp, 'personal_status': personal_status, 'guarantors': guarantors, 'property': property, 'installments': installments, 'housing': housing, 'job': job, 'tel': tel, 'foreign': foreign})
+    return templates.TemplateResponse('feedback.html', context={'request': request, 'result': result, 'status': status, 'history': history, 'purpose' : purpose, 'account' : account, 'emp': emp, 'personal_status': personal_status, 'guarantors': guarantors, 'property': property, 'installments': installments, 'housing': housing, 'job': job, 'tel': tel, 'foreign': foreign})
 
 
 @app.post("/feedback_loop", status_code=200)
@@ -143,6 +160,34 @@ def feedback_loop(data: List[FeedbackIn]):
     model.retrain(data)
     #print(data)
     return {"detail": "Feedback loop successful"}
+
+@app.get("/build_model", status_code=200)
+# Route to further train the model based on user input in form of feedback loop
+# Payload: FeedbackIn containing the parameters and correct flower class
+# Response: Dict with detail confirming success (200)
+def create_model(request: Request):
+
+    result = "Fill above details and click on Predict"
+    return templates.TemplateResponse('feature.html', context={'request': request, 'result': result})
+
+
+@app.post("/build_model", status_code=200)
+async def create_model(request: Request, classifier: str = Form(...), target: str = Form(...), numerical_col: list = Form(...), categorical_col: list = Form(...), credit_data_file: UploadFile = File(...)):
+    # print(classifier)
+    # print(target)
+    # print('hello')
+    # print(credit_data)
+    content_file = await credit_data_file.read()
+    # print(content_file)
+    s = str(content_file, 'utf-8')
+    data = io.StringIO(s)
+    df = pd.read_csv(data, sep=",")
+    X, y = df.drop(target, axis="columns"), df[target]
+
+    result = build(classifier, X, y, numerical_col, categorical_col)
+    print(result)
+    return templates.TemplateResponse('feature.html', context={'request': request, 'result': result})
+
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host='0.0.0.0', port=8000, reload=True)

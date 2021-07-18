@@ -29,9 +29,18 @@ class CreditScoreModel:
     # function to retrain the model as part of the feedback loop
     def retrain(self, data):
         # pull out the relevant X and y from the FeedbackIn object
-        X = [list(d.dict().values())[:-1] for d in data]
-        y = [list(d.risk_class) for d in data]
-
+        df = pd.DataFrame(data)
+        new_data = copy.deepcopy(df)
+        columns = df.columns
+        columns_data = {}
+        for column in columns:
+            if new_data[column].dtype != int:
+                columns_data[column] = new_data[column].unique()
+                for i in range(len(columns_data[column])):
+                    new_data.loc[:, column][new_data[column] == columns_data[column][i]] = int(i)
+                new_data[column] = pd.to_numeric(new_data[column])
+        #print(new_data)
+        X, y = new_data.iloc[:, 0:19], new_data.iloc[:, 20]
         # fit the classifier again based on the new data obtained
         self.model.fit(X, y)
 

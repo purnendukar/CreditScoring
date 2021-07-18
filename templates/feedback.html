@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
     <title>Predict Credit score</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
@@ -9,6 +13,71 @@
 </head>
 <body>
 <div class="ui container">
+   <script>
+
+$(document).ready(function() {
+data_list=[];
+var new_data;
+  $("#add").on( "click",function() {
+    console.log('adding data');
+    $('.ui.modal').modal('show');
+    var sel1 = document.getElementById("Status_of_existing_checking_account");
+    var Status_of_existing_checking_account = sel1.options[sel1.selectedIndex].text
+    var Duration_in_month = $("#Duration_in_month").val();
+    var sel2 = document.getElementById("Credit_history");
+    var Credit_history = sel2.options[sel2.selectedIndex].text
+    var sel3 = document.getElementById("Purpose");
+    var Purpose = sel3.options[sel3.selectedIndex].text
+    var Credit_amount = $("#Credit_amount").val();
+    var sel4 = document.getElementById("Savings_account_bonds");
+    var Savings_account_bonds = sel4.options[sel4.selectedIndex].text
+    var sel5 = document.getElementById("Present_employment_since");
+    var Present_employment_since = sel5.options[sel5.selectedIndex].text
+    var Installment_rate_in_percentage_of_disposable_income = $("#Installment_rate_in_percentage_of_disposable_income").val();
+    var sel6 = document.getElementById("Personal_status_and_sex");
+    var Personal_status_and_sex = sel6.options[sel6.selectedIndex].text
+    var sel7 = document.getElementById("Other_debtors_guarantors");
+    var Other_debtors_guarantors = sel7.options[sel7.selectedIndex].text
+    var Present_residence_since = $("#Present_residence_since").val();
+    var sel8 = document.getElementById("Property");
+    var Property = sel8.options[sel8.selectedIndex].text
+    var Age_in_years = $("#Age_in_years").val();
+    var sel9 = document.getElementById("Other_installment_plans");
+    var Other_installment_plans = sel9.options[sel9.selectedIndex].text
+    var sel10 = document.getElementById("Housing");
+    var Housing = sel10.options[sel10.selectedIndex].text
+    var Number_of_existing_credits_at_this_bank = $("#Number_of_existing_credits_at_this_bank").val();
+    var sel11 = document.getElementById("Job");
+    var Job = sel11.options[sel11.selectedIndex].text
+    var Number_of_people_being_liable_to_provide_maintenance_for = $("#Number_of_people_being_liable_to_provide_maintenance_for").val();
+    var sel12 = document.getElementById("Telephone");
+    var Telephone = sel12.options[sel12.selectedIndex].text
+    var sel13 = document.getElementById("foreign_worker");
+    var foreign_worker = sel13.options[sel13.selectedIndex].text
+    var risk_class = $("#risk_class").val();
+    new_data = { "Status_of_existing_checking_account": Status_of_existing_checking_account, "Duration_in_month": Duration_in_month, "Credit_history": Credit_history, "Purpose": Purpose, "Credit_amount": Credit_amount, "Savings_account_bonds": Savings_account_bonds, "Present_employment_since": Present_employment_since, "Installment_rate_in_percentage_of_disposable_income": Installment_rate_in_percentage_of_disposable_income, "Personal_status_and_sex": Personal_status_and_sex, "Other_debtors_guarantors": Other_debtors_guarantors, "Present_residence_since": Present_residence_since, "Property": Property, "Age_in_years": Age_in_years, "Other_installment_plans": Other_installment_plans, "Housing": Housing, "Number_of_existing_credits_at_this_bank": Number_of_existing_credits_at_this_bank, "Job": Job, "Number_of_people_being_liable_to_provide_maintenance_for": Number_of_people_being_liable_to_provide_maintenance_for, "Telephone": Telephone, "foreign_worker": foreign_worker, "risk_class": risk_class}
+    console.log(new_data);
+  });
+
+  $("#feedback").on( "click",function() {
+      console.log('Retraining');
+      $.ajax({
+        url: '/feedback_loop',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data_list),
+        dataType: 'json'
+      });
+  });
+  $("#save").click(function() {
+  var risk_class = $("#risk_class").val();
+  new_data['risk_class'] = risk_class
+      $('.ui.modal').modal('hide');
+        data_list.push(new_data)
+  console.log(data_list);
+  });
+});
+</script>
 <h2>Predict Credit score</h2>
 <div>
   <form method="post">
@@ -152,12 +221,38 @@
         <option value="1">{{foreign[1]}}</option>
      </select>
      <br><br>
-     <button type="submit" class="ui button primary">Predict</button>
-      <br><br>
-      <p>Prediction: {{ result }}</p>
-      <br><br>
   </form>
+   <form>
+
+   </form>
+     <button type="button" id="add" class="ui button secondary">Add target value</button>
+     <button type="button" id="feedback" class="ui button secondary">Retrain</button>
+   </div>
+   <div class="ui modal">
+    <i class="close icon"></i>
+    <div class="header">
+      Add risk class
+    </div>
+    <div class="content">
+        <div class="ui form">
+            <div class="field">
+              <label>"Good Risk", "Bad Risk"</label>
+              <textarea id="risk_class"></textarea>
+            </div>
+          </div>
+    </div>
+    <div class="actions">
+      <div id="save" class="ui positive right labeled icon button">
+        Add Data
+        <i class="plus icon"></i>
+      </div>
+    </div>
   </div>
   </div>
+</body>
+</html></title>
+</head>
+<body>
+
 </body>
 </html>
